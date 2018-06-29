@@ -1,0 +1,6 @@
+[Unit]
+Description=Bobaos Datapoint Sdk Daemon
+[Service]
+ExecStart=/usr/bin/env node %/0xff_ws/index.js
+[Install]
+WantedBy=default.target
