@@ -8,6 +8,19 @@ First of all, install Weinzierl BAOS 838 kBerry, set up serial port, install bds
 
 All instructions you can find on [bdsd.sock repository page](https://github.com/bobaos/bdsd.sock).
 
+Now, clone this repo, install dependencies and start systemd service:
+
+```
+cd ~/
+git clone https://github.com/shabunin/bdsd.ws
+cd ~/bdsd.ws
+npm install
+cp ./bdsd-ws.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable bdsd-ws.service
+systemctl --user start bdsd-ws.service
+```
+
 ## Usage with SimpSharpPro:
 
 ```csharp
@@ -68,10 +81,10 @@ namespace SIMPLSharpProgram1 {
   /// * Register devices
   /// * Register event handlers
   /// * Add Console Commands
-  /// 
+  ///
   /// Please be aware that the constructor needs to exit quickly; if it doesn't
   /// exit in time, the SIMPL#Pro program will exit.
-  /// 
+  ///
   /// You cannot send / receive data in the constructor
   /// </summary>
   public ControlSystem(): base() {
@@ -104,16 +117,16 @@ namespace SIMPLSharpProgram1 {
   }
 
   /// <summary>
-  /// InitializeSystem - this method gets called after the constructor 
-  /// has finished. 
-  /// 
+  /// InitializeSystem - this method gets called after the constructor
+  /// has finished.
+  ///
   /// Use InitializeSystem to:
   /// * Start threads
   /// * Configure ports, such as serial and verisports
   /// * Start and initialize socket connections
   /// Send initial device configurations
-  /// 
-  /// Please be aware that InitializeSystem needs to exit quickly also; 
+  ///
+  /// Please be aware that InitializeSystem needs to exit quickly also;
   /// if it doesn't exit in time, the SIMPL#Pro program will exit.
   /// </summary>
   public override void InitializeSystem() {
@@ -150,17 +163,17 @@ namespace SIMPLSharpProgram1 {
   }
 
   /// <summary>
-  /// Event Handler for Ethernet events: Link Up and Link Down. 
-  /// Use these events to close / re-open sockets, etc. 
+  /// Event Handler for Ethernet events: Link Up and Link Down.
+  /// Use these events to close / re-open sockets, etc.
   /// </summary>
-  /// <param name="ethernetEventArgs">This parameter holds the values 
-  /// such as whether it's a Link Up or Link Down event. It will also indicate 
+  /// <param name="ethernetEventArgs">This parameter holds the values
+  /// such as whether it's a Link Up or Link Down event. It will also indicate
   /// wich Ethernet adapter this event belongs to.
   /// </param>
   void ControlSystem_ControllerEthernetEventHandler(EthernetEventArgs ethernetEventArgs) {
    switch (ethernetEventArgs.EthernetEventType) { //Determine the event type Link Up or Link Down
     case (eEthernetEventType.LinkDown):
-     //Next need to determine which adapter the event is for. 
+     //Next need to determine which adapter the event is for.
      //LAN is the adapter is the port connected to external networks.
      if (ethernetEventArgs.EthernetAdapter == EthernetAdapterType.EthernetLANAdapter) {
       //
@@ -191,7 +204,7 @@ namespace SIMPLSharpProgram1 {
       break;
      case (eProgramStatusEventType.Stopping):
       //The program has been stopped.
-      //Close all threads. 
+      //Close all threads.
       //Shutdown all Client/Servers in the system.
       //General cleanup.
       //Unsubscribe to all System Monitor events
@@ -214,7 +227,7 @@ namespace SIMPLSharpProgram1 {
       //Removable media was detached from the system
       break;
      case (eSystemEventType.Rebooting):
-      //The system is rebooting. 
+      //The system is rebooting.
       //Very limited time to preform clean up and save any settings to disk.
       break;
     }
